@@ -1,6 +1,5 @@
-********************************
+# Installation
 yarn install
 yarn add react-native-sqlite-storage
-********************************
-TO RUN
+##TO RUN
 yarn react-native start
