@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, TextInput, Button, Alert, FlatList } from "react-native";
-import { openDatabase } from "react-native-sqlite-storage";
 import { DataSource} from "typeorm"
 import { Category } from "./entities/listitems";
 
@@ -15,9 +14,7 @@ export const AppDataSource = new DataSource({
 })
 
  
-const db = openDatabase({
-  name: 'TypeORMtest'
-});
+
 
 const App = () => {
   const [category, setCategory] = useState("");
@@ -34,14 +31,14 @@ const App = () => {
   
 
   const createTables = async () => {
-    (await db).transaction(txn => {
+    (await db).transaction((txn: { executeSql: (arg0: string, arg1: never[], arg2: () => void, arg3: (error: any) => void) => void; }) => {
       txn.executeSql(
         "CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255) NOT NULL)",
         [],
         () => {
           console.log("Table created Succesfully");
         },
-        error => {
+        (        error: string) => {
           console.log("Error on creating table" + error);
         }
       );
@@ -53,27 +50,27 @@ const App = () => {
       Alert.alert("Enter Category");
       return false;
     }
-    (await db).transaction (txn =>{
-      txn.executeSql(
+    (await AppDataSource).transaction (txn =>{
+      return txn.executeSql(
         `INSERT INTO categories (name) VALUES (?)`,
         [category],
         () => {
-          console.log(`${category}item added successfully `)
-          getCategories()
+          console.log(`${category}item added successfully `);
+          getCategories();
         },
-        error => {
+        (        error: string) => {
           console.log("Error on adding item" + error);
         }
-      )
+      );
     })
   };
 
   const getCategories = async () => {
-    (await db).transaction((txn) => {
+    (await db).transaction((txn: { executeSql: (arg0: string, arg1: never[], arg2: (txn: any, res: any) => void, arg3: (error: any) => void) => void; }) => {
       txn.executeSql(
         `SELECT * FROM categories ORDER BY Id DESC`,
         [],
-        (txn, res) => {
+        (txn: any, res: { rows: { length: any; item: (arg0: number) => any; }; }) => {
           console.log("Successfully retrieved ITEM");
           let len = res.rows.length;
   
@@ -86,7 +83,7 @@ const App = () => {
             setCategories(results);
           }
         },
-        (error) => {
+        (error: string) => {
           console.log("Error on getting ITEMS" + error);
         }
       );
