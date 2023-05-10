@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, TextInput, Button, Alert, FlatList } from "react-native";
 import { openDatabase } from "react-native-sqlite-storage";
+import { DataSource} from "typeorm"
+import { Category } from "./entities/listitems";
 
+export const AppDataSource = new DataSource({
+      type: "react-native",
+      database: "./main.sqlite",
+      location: "default",
+      logging: ["error"],
+      entities: [Category],
+      synchronize: true,
+      driver: require("typeorm-react-native-adapter").ReactNativeDriver,
+})
+
+ 
 const db = openDatabase({
   name: 'TypeORMtest'
 });
@@ -104,5 +117,7 @@ const renderCategory = ({ item }: { item: { id: number; name: string } }) => {
     </View>
   );
 };
+
+
 
 export default App;
