@@ -1,49 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, TextInput, Button, Alert, FlatList } from "react-native";
-import { DataSource} from "typeorm"
+import { DataSource } from "typeorm";
 import { Category } from "./entities/listitems";
 
 const AppDataSource = new DataSource({
-      type: "react-native",
-      database: "./main.sqlite",
-      location: "default",
-      logging: ["error"],
-      entities: [Category],
-})
+  type: "react-native",
+  database: "./main.sqlite",
+  location: "default",
+  logging: ["error"],
+  entities: [Category],
+});
 
 AppDataSource.initialize()
   .then(() => {
-      console.log("Data Source has been initialized!")
+    console.log("Data Source has been initialized!");
   })
   .catch((err) => {
-      console.error("Error during Data Source initialization", err)
-  })
-
+    console.error("Error during Data Source initialization", err);
+  });
 
 const App = () => {
   const [category, setCategory] = useState("");
-  const [categories, setCategories] = useState<{ id: any; name: any; }[]>([]);
+  const [categories, setCategories] = useState<{ id: any; name: any }[]>([]);
 
+  const addCategory = async () => {
+    if (!category) {
+      Alert.alert("Enter Category");
+      return false;
+    }
 
-  const addCategory = await DataSource
-    .createQueryBuilder()
-    .select("user")
-    .from(User, "user")
-    .where("user.id = :id", { id: 1 })
-    .getOne()
-}
- 
+    try {
+      await AppDataSource.query("INSERT INTO categories (name) VALUES (?)", [category]);
+      console.log(`${category} item added successfully`);
+      getCategories();
+    } catch (error) {
+      console.log("Error on adding item" + error);
+    }
+  };
 
-  
-const renderCategory = ({ item }: { item: { id: number; name: string } }) => {
+  const getCategories = async () => {
+    const results = await AppDataSource.query("SELECT * FROM categories");
+    setCategories(results);
+  };
 
-    return(
-      <View style={{flexDirection: "row",paddingVertical:12,paddingHorizontal:12,borderBottomWidth:1,borderColor:"black"}}>
-        <Text style ={{marginRight:9}}>{item.id}</Text>
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const renderCategory = ({ item }: { item: { id: number; name: string } }) => {
+    return (
+      <View style={{ flexDirection: "row", paddingVertical: 12, paddingHorizontal: 12, borderBottomWidth: 1, borderColor: "black" }}>
+        <Text style={{ marginRight: 9 }}>{item.id}</Text>
         <Text>{item.name}</Text>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <View>
@@ -60,10 +71,4 @@ const renderCategory = ({ item }: { item: { id: number; name: string } }) => {
   );
 };
 
-
-
 export default App;
-function createTables() {
-  throw new Error("Function not implemented.");
-}
-
