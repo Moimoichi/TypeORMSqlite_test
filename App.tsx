@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, TextInput, Button, Alert, FlatList } from "react-native";
 import { DataSource } from "typeorm";
 import { Category } from "./entities/listitems";
+import 'reflect-metadata';
+
 
 const AppDataSource = new DataSource({
   type: "react-native",

@@ -3,8 +3,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 @Entity()
 export class Category {
   @PrimaryGeneratedColumn()
-  id!: string;
+  renderCategory!: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string;
 }

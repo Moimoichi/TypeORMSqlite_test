@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-   
+    
   },
   "extends": "@tsconfig/react-native/tsconfig.json"
 }
