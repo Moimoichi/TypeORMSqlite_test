@@ -12,6 +12,7 @@ const AppDataSource = new DataSource({
   location: "default",
   logging: ["error"],
   entities: [text],
+  synchronize:true,
 });
 
 AppDataSource.initialize ()
@@ -22,10 +23,14 @@ AppDataSource.initialize ()
     console.error("Error during Data Source initialization", err);
   });
 
+  
+
   const App = () => {
     const [category, setCategory] = useState("");
     const [categories, setCategoriesState] = useState<{ id: any; name: string }[]>([]);
 
+  
+  
     const addCategory = async () => {
       if (!category) {
         Alert.alert("Enter Category");
@@ -54,7 +59,7 @@ AppDataSource.initialize ()
           .createQueryBuilder()
           .select(category)
           .from(text, category)
-          .where("item.id = :id", { id: 1 })
+          .where({ id: 1 })
           .getMany();
         setCategories(categories);
       } catch (error) {
@@ -70,6 +75,7 @@ AppDataSource.initialize ()
     };
     
   useEffect(() => {
+   
     getCategories();
   }, []);
 
@@ -104,3 +110,5 @@ AppDataSource.initialize ()
 };
 
 export default App;
+
+

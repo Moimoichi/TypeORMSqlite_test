@@ -1,7 +1,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
+@Entity('textEntityXREF')
 export class text {
 
   @PrimaryGeneratedColumn()
