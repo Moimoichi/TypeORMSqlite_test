@@ -4,6 +4,10 @@ import { DataSource } from "typeorm";
 import { text } from "./entities/listitems";
 import 'reflect-metadata';
 import SQLiteStorage from "react-native-sqlite-storage"
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 const AppDataSource = new DataSource({
   type: "react-native",
