@@ -2,12 +2,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
-export class Category {
+export class text {
 
   @PrimaryGeneratedColumn()
   id: any;
   @Column({ type: 'varchar' })
-  name: any;
+  name: string = "";
 
 }
 

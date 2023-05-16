@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, TextInput, Button, Alert, FlatList } from "react-native";
 import { DataSource } from "typeorm";
-import { Category } from "./entities/listitems";
+import { text } from "./entities/listitems";
 import 'reflect-metadata';
 import SQLiteStorage from "react-native-sqlite-storage"
 
@@ -11,10 +11,10 @@ const AppDataSource = new DataSource({
   driver: SQLiteStorage,
   location: "default",
   logging: ["error"],
-  entities: [Category],
+  entities: [text],
 });
 
-AppDataSource.initialize()
+AppDataSource.initialize ()
   .then(() => {
     console.log("Data Source has been initialized!");
   })
@@ -36,8 +36,8 @@ AppDataSource.initialize()
         await AppDataSource
           .createQueryBuilder()
           .insert()
-          .into(Category)
-          .values([{ name: () => category }])
+          .into(text)
+          .values([{ name: category }])
           .execute();
         console.log(`${category} item added successfully`);
         getCategories();
@@ -45,22 +45,23 @@ AppDataSource.initialize()
       } catch (error) {
         console.log("Error on adding item", error);
       }
-      
-    }
+    };
+    
     
     const getCategories = async () => {
       try {
         const categories = await AppDataSource
           .createQueryBuilder()
           .select(category)
-          .from(Category, category)
+          .from(text, category)
+          .where("item.id = :id", { id: 1 })
           .getMany();
         setCategories(categories);
       } catch (error) {
         console.log("Error on getting categories", error);
       }
     };
-    const setCategories = (categories: Category[]) => {
+    const setCategories = (categories: text[]) => {
       const mappedCategories = categories.map((category) => ({
         id: category.id,
         name: category.name,
